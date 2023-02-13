@@ -7,5 +7,5 @@ urlpatterns = [
     path('', WelcomeMessage.as_view()),
     path('account/', AccountCreation.as_view()),
     path('account/<int:number>/', AccountInfo.as_view()),
-    path('account/transfer/', MakeTransfer.as_view())
+    path('transfer/', MakeTransfer.as_view())
 ]

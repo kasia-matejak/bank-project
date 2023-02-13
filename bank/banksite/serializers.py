@@ -11,14 +11,13 @@ class AccountSerializer(serializers.ModelSerializer):
         return Account.objects.create(**validated_data)
 
 
-class TransferSerializer(serializers.Serializer):
+class TransferSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transfer
         fields = ["sender", "receiver", "ammount", "description"]
-        depth = 1
 
-    def get_account_by_number(self, account_number):
-        return Account.objects.get(number=account_number)
+    def get_account_by_number(self, number):
+        return Account.objects.get(number=number)
 
     def create(self, validated_data):
         sender_account = self.get_account_by_number(number=validated_data["sender"])
@@ -27,5 +26,5 @@ class TransferSerializer(serializers.Serializer):
             sender=sender_account,
             receiver=receiver_account,
             ammount=validated_data["ammount"],
-            description=validated_data["description"],
+            description=validated_data["description"]
         )

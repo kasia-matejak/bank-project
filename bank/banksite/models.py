@@ -9,8 +9,8 @@ class Account(models.Model):
         return self.number
 
 class Transfer(models.Model):
-    sender = models.ManyToManyField(Account, related_name='sender')
-    receiver = models.ManyToManyField(Account, related_name='receiver')
+    sender = models.ForeignKey(Account, related_name='sender', on_delete=models.DO_NOTHING)
+    receiver = models.ForeignKey(Account, related_name='receiver', on_delete=models.DO_NOTHING)
     ammount = models.IntegerField()
     description = models.CharField(max_length=100)
     
