@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from banksite.models import Account, Transfer
+from banksite.selectors import funds_available
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -22,9 +23,10 @@ class TransferSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         sender_account = self.get_account_by_number(number=validated_data["sender"])
         receiver_account = self.get_account_by_number(number=validated_data["receiver"])
-        return Transfer.objects.create(
-            sender=sender_account,
-            receiver=receiver_account,
-            ammount=validated_data["ammount"],
-            description=validated_data["description"]
-        )
+        if funds_available(sender_account, validated_data['ammount']):
+            return Transfer.objects.create(
+                sender=sender_account,
+                receiver=receiver_account,
+                ammount=validated_data["ammount"],
+                description=validated_data["description"]
+            )
