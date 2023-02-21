@@ -14,3 +14,8 @@ class UnexpectedTransferError(APIException):
     status_code = 500
     default_detail = "Unexpected error with transfering funds occurred"
     default_code = "internal_server-error"
+    
+class AccountDoesNotExistError(APIException):
+    status_code = 400
+    default_detail = "One of the accounts does not exist"
+    default_code = "bad_request"

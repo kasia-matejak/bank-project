@@ -1,8 +1,7 @@
 from banksite.models import Account
 from .exceptions import InsufficientFundsError
 
-def funds_available(sender: int, ammount):
-    sender = Account.objects.get(number=sender)
+def funds_available(sender: Account, ammount):
     if sender.status > ammount:
         return
     else:

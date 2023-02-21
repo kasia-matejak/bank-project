@@ -1,3 +1,5 @@
 django
 djangorestframework
 pygments
+djangorestframework-simplejwt
+django-cors-headers

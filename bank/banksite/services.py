@@ -1,9 +1,13 @@
 from banksite.models import Account, Transfer
 from .selectors import funds_available
-from .exceptions import OwnTransferError, InsufficientFundsError, UnexpectedTransferError
+from django.core.exceptions import ObjectDoesNotExist
+from .exceptions import *
 
 def get_account_by_number(number: int):
-    return Account.objects.get(number=number)
+    try:
+        return Account.objects.get(number=number)
+    except ObjectDoesNotExist:
+        raise AccountDoesNotExistError
 
 def create_transfer(validated_data) -> Transfer:
     sender = get_account_by_number(number=validated_data['sender'])
@@ -38,10 +42,5 @@ def make_transfer(sender: Account, receiver: Account, ammount: int):
         accounts_differ(sender, receiver)
         funds_available(sender, ammount)
         move_money(sender, receiver, ammount)
-    except (Exception, OwnTransferError, InsufficientFundsError, UnexpectedTransferError):
+    except (OwnTransferError, InsufficientFundsError, UnexpectedTransferError):
         raise
-
-
-# refactor - serializer takes validated data but you should implement the function CHANGING the validated data:
-# - exchange integers to Account objects
-# - import funds.available from selectors
